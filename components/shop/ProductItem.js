@@ -1,28 +1,41 @@
 import React from "react";
 import Colors from "../../constants/Colors";
-import { View, Text, Image, StyleSheet, Button } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Button,
+  TouchableNativeFeedback
+} from "react-native";
 
 const ProductItem = props => {
   return (
     <View style={styles.product}>
-      <View style={styles.imageContainer}>
-        <Image style={styles.image} source={{ uri: props.image }} />
-      </View>
-      <View style={styles.detail}>
-        <Text style={styles.title}>{props.title}</Text>
-        <Text style={styles.price}>R$ {props.price.toFixed(2)}</Text>
-      </View>
-      <View style={styles.actions}>
-        <Button
-          color={Colors.primary}
-          title={"Ver detalhes"}
-          onPress={props.onViewDetail}
-        />
-        <Button
-          color={Colors.primary}
-          title={"Carrinho"}
-          onPress={props.onAddToCart}
-        />
+      <View style={styles.touch}>
+        <TouchableNativeFeedback onPress={props.onViewDetail} useForeground>
+          <View>
+            <View style={styles.imageContainer}>
+              <Image style={styles.image} source={{ uri: props.image }} />
+            </View>
+            <View style={styles.detail}>
+              <Text style={styles.title}>{props.title}</Text>
+              <Text style={styles.price}>R$ {props.price.toFixed(2)}</Text>
+            </View>
+            <View style={styles.actions}>
+              <Button
+                color={Colors.primary}
+                title={"Ver detalhes"}
+                onPress={props.onViewDetail}
+              />
+              <Button
+                color={Colors.primary}
+                title={"Carrinho"}
+                onPress={props.onAddToCart}
+              />
+            </View>
+          </View>
+        </TouchableNativeFeedback>
       </View>
     </View>
   );
@@ -33,6 +46,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: "15%",
     padding: 10
+  },
+  touch: {
+    overflow: "hidden"
   },
   product: {
     shadowColor: "black",
