@@ -61,6 +61,10 @@ const CartScreen = props => {
   );
 };
 
+CartScreen.navigationOptions = {
+  headerTitle: "Seu Carrinho"
+};
+
 const styles = StyleSheet.create({
   screen: {
     margin: 20
