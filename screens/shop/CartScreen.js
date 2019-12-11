@@ -3,6 +3,7 @@ import { View, Text, FlatList, StyleSheet, Button } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import Colors from "../../constants/Colors";
 import CardItem from "../../components/shop/CardItem";
+import * as orderActions from "../../store/actions/order";
 import * as actions from "../../store/actions/cart";
 
 const CartScreen = props => {
@@ -35,6 +36,9 @@ const CartScreen = props => {
           color={Colors.accent}
           title="Pedir agora"
           disabled={cartItems.length === 0}
+          onPress={() => {
+            dispatch(orderActions.addOrder(cartItems, cartTotalAmount));
+          }}
         />
       </View>
       <View>
