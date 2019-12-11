@@ -5,7 +5,6 @@ import ProductItem from "../../components/shop/ProductItem";
 import * as actions from "../../store/actions/cart";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../components/UI/HeaderBUtton";
-import { Header } from "react-native/Libraries/NewAppScreen";
 
 const ProductsOverviewScreen = props => {
   const products = useSelector(state => state.products.availableProducts);
@@ -26,7 +25,7 @@ const ProductsOverviewScreen = props => {
               title: itemData.item.title
             });
           }}
-          onAddToCard={() => {
+          onAddToCart={() => {
             dispatch(actions.addToCart(itemData.item));
           }}
         />
