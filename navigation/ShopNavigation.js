@@ -2,14 +2,15 @@ import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import { Platform } from "react-native";
 import ProductsOverviewScreen from "../screens/shop/ProductOverviewScreen";
-import ProductDetailScree from "../screens/shop/ProductDetailsScreen";
-import Colors from "../constants/Colors";
 import ProductDetailScreen from "../screens/shop/ProductDetailsScreen";
+import CartScreen from "../screens/shop/CartScreen";
+import Colors from "../constants/Colors";
 
 const ProductsNavigator = createStackNavigator(
   {
     ProductsOverview: ProductsOverviewScreen,
-    ProductDetail: ProductDetailScreen
+    ProductDetail: ProductDetailScreen,
+    Cart: CartScreen
   },
   {
     defaultNavigationOptions: {
@@ -19,7 +20,7 @@ const ProductsNavigator = createStackNavigator(
       headerTitleStyle: {
         fontFamily: "open-sans-bold"
       },
-      headerTint: Platform.OS === "android" ? "white" : Colors.primary
+      headerTint: "white"
     }
   }
 );
