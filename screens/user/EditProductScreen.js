@@ -1,5 +1,12 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { View, Text, StyleSheet, TextInput, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  ScrollView,
+  Alert
+} from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../components/UI/HeaderBUtton";
 import { useSelector } from "react-redux";
@@ -26,6 +33,7 @@ const EditProductScreen = props => {
     } else {
       dispatch(productsActions.createProduct(title, description, url, +price));
     }
+    props.navigation.goBack();
   }, [dispatch, prodId, title, url, price, description]);
 
   useEffect(() => {
