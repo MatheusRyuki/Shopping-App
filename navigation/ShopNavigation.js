@@ -68,7 +68,7 @@ const ShopNavigator = createDrawerNavigator(
   {
     Produtos: ProductsNavigator,
     Pedidos: OrdersNavigator,
-    Conta: AdminNavigator
+    Admin: AdminNavigator
   },
   {
     contentOptions: {
