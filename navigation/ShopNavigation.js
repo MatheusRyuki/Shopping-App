@@ -51,8 +51,8 @@ const OrdersNavigator = createStackNavigator(
 
 const ShopNavigator = createDrawerNavigator(
   {
-    Products: ProductsNavigator,
-    Orders: OrdersNavigator
+    Produtos: ProductsNavigator,
+    Ordens: OrdersNavigator
   },
   {
     contentOptions: {
