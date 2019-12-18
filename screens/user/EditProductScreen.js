@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { View, Text, StyleSheet, TextInput, ScrollView } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../components/UI/HeaderBUtton";
@@ -16,6 +16,14 @@ const EditProductScreen = props => {
   const [description, setDescription] = useState(
     editedProduct ? editedProduct.description : ""
   );
+
+  const submitHandler = useCallback(() => {
+    console.log("Handler");
+  }, []);
+
+  useEffect(() => {
+    props.navigation.setParams({ submit: submitHandler });
+  }, [submitHandler]);
 
   return (
     <ScrollView>
@@ -60,19 +68,15 @@ const EditProductScreen = props => {
 };
 
 EditProductScreen.navigationOptions = navData => {
+  const submitFn = navData.navigation.getParam("submit");
+
   return {
     headerTitle: navData.navigation.getParam("productId")
       ? "Editar Produto"
       : "Adicionar Produto",
     headerRight: (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
-        <Item
-          title="Menu"
-          iconName={"md-checkmark"}
-          onPress={() => {
-            navData.navigation.navigate("EditProduct");
-          }}
-        />
+        <Item title="Menu" iconName={"md-checkmark"} onPress={submitFn} />
       </HeaderButtons>
     )
   };
