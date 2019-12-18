@@ -52,7 +52,7 @@ const OrdersNavigator = createStackNavigator(
 const ShopNavigator = createDrawerNavigator(
   {
     Produtos: ProductsNavigator,
-    Ordens: OrdersNavigator
+    Pedidos: OrdersNavigator
   },
   {
     contentOptions: {

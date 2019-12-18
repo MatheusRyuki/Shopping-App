@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList, Text } from "react-native";
+import { FlatList } from "react-native";
 import { useSelector } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../components/UI/HeaderBUtton";
@@ -16,6 +16,7 @@ const OrdersScreen = props => {
         <OrderItem
           amount={itemData.item.totalAmount}
           date={itemData.item.readableDate}
+          items={itemData.item.items}
         />
       )}
     />
