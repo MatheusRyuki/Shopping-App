@@ -12,6 +12,7 @@ import HeaderButton from "../../components/UI/HeaderBUtton";
 import { useSelector } from "react-redux";
 import * as productsActions from "../../store/actions/products";
 import { useDispatch } from "react-redux";
+import Input from "../../components/UI/Input";
 
 const FORM_UPDATE = "UPDATE";
 
@@ -118,48 +119,37 @@ const EditProductScreen = props => {
   return (
     <ScrollView>
       <View style={styles.form}>
-        <View style={styles.formControl}>
-          <Text style={styles.label}>Título</Text>
-          <TextInput
-            style={styles.input}
-            value={formState.inputValues.title}
-            onChangeText={textHandlerChange.bind(this, "title")}
-            keyboardType="default"
-            autoCapitalize="sentences"
-            autoCorrect
+        <Input
+          label="Título"
+          errorMsg="Por favor, coloque um título válido"
+          keyboardType="default"
+          autoCapitalize="sentences"
+          autoCorrect
+          returnKeyType="next"
+        />
+        <Input
+          label="Imagem"
+          errorMsg="Por favor, coloque uma imagem válido"
+          keyboardType="default"
+          returnKeyType="next"
+        />
+        {editedProduct ? null : (
+          <Input
+            label="Preço"
+            errorMsg="Por favor, coloque um preço válido"
+            keyboardType="decimal-pad"
             returnKeyType="next"
           />
-          {!formState.inputValidities.title && (
-            <Text>Por favor, coloque um título válido./</Text>
-          )}
-        </View>
-        <View style={styles.formControl}>
-          <Text style={styles.label}>URL da Imagem</Text>
-          <TextInput
-            style={styles.input}
-            value={formState.inputValues.url}
-            onChangeText={textHandlerChange.bind(this, "url")}
-          />
-        </View>
-        {editedProduct ? null : (
-          <View style={styles.formControl}>
-            <Text style={styles.label}>Preço</Text>
-            <TextInput
-              style={styles.input}
-              value={formState.inputValues.price}
-              onChangeText={textHandlerChange.bind(this, "price")}
-              keyboardType="decimal-pad"
-            />
-          </View>
         )}
-        <View style={styles.formControl}>
-          <Text style={styles.label}>Descrição</Text>
-          <TextInput
-            style={styles.input}
-            value={formState.inputValues.description}
-            onChangeText={textHandlerChange.bind(this, "description")}
-          />
-        </View>
+        <Input
+          label="Descrição"
+          errorMsg="Por favor, coloque uma descrição válida"
+          keyboardType="default"
+          autoCapitalize="sentences"
+          autoCorrect
+          multiline
+          numberOfLines={3}
+        />
       </View>
     </ScrollView>
   );
@@ -183,19 +173,6 @@ EditProductScreen.navigationOptions = navData => {
 const styles = StyleSheet.create({
   form: {
     margin: 20
-  },
-  formControl: {
-    width: "100%"
-  },
-  label: {
-    fontFamily: "open-sans-bold",
-    marginVertical: 8
-  },
-  input: {
-    paddingHorizontal: 2,
-    paddingVertical: 5,
-    borderBottomColor: "#ccc",
-    borderBottomWidth: 1
   }
 });
 
