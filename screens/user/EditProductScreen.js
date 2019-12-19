@@ -17,7 +17,29 @@ const FORM_UPDATE = "UPDATE";
 
 const formReducer = (state, action) => {
   if (action.type === FORM_UPDATE) {
+    const updatedValues = {
+      ...state.inputValues,
+      [action.input]: action.value
+    };
+
+    const updatedValidities = {
+      ...state.inputValidities,
+      [action.input]: action.isValid
+    };
+
+    let formIsValid = true;
+
+    for (const key in updatedValidities) {
+      formIsValid = formIsValid && updatedValidities[key];
+    }
+
+    return {
+      formIsValid,
+      inputValidities: updatedValidities,
+      inputValues: updatedValues
+    };
   }
+  return state;
 };
 
 const EditProductScreen = props => {
@@ -44,7 +66,7 @@ const EditProductScreen = props => {
   });
 
   const submitHandler = useCallback(() => {
-    if (!titleIsValid) {
+    if (!formState.formIsValid) {
       Alert.alert(
         "Informações erradas!",
         "Por favor, cheque as informações do formulário.",
@@ -52,24 +74,45 @@ const EditProductScreen = props => {
       );
       return;
     }
+
     if (editedProduct) {
-      dispatch(productsActions.updateProduct(prodId, title, description, url));
+      dispatch(
+        productsActions.updateProduct(
+          prodId,
+          formState.inputValues.title,
+          formState.inputValues.description,
+          formState.inputValues.url
+        )
+      );
     } else {
-      dispatch(productsActions.createProduct(title, description, url, +price));
+      dispatch(
+        productsActions.createProduct(
+          formState.inputValues.title,
+          formState.inputValues.description,
+          formState.inputValues.url,
+          +formState.inputValues.price
+        )
+      );
     }
+
     props.navigation.goBack();
-  }, [dispatch, prodId, title, url, price, description, titleIsValid]);
+  }, [dispatch, prodId, formState]);
 
   useEffect(() => {
     props.navigation.setParams({ submit: submitHandler });
   }, [submitHandler]);
 
-  const titleHandlerChange = text => {
+  const textHandlerChange = (inputIdentifier, text) => {
     let isValid = false;
-    if (text.trim().length === 0) {
+    if (text.trim().length > 0) {
       isValid = true;
     }
-    dispatchForm({ type: FORM_UPDATE, value: text, isValid, input: "title" });
+    dispatchForm({
+      type: FORM_UPDATE,
+      value: text,
+      isValid,
+      input: inputIdentifier
+    });
   };
 
   return (
@@ -79,21 +122,23 @@ const EditProductScreen = props => {
           <Text style={styles.label}>Título</Text>
           <TextInput
             style={styles.input}
-            value={title}
-            onChangeText={titleHandlerChange}
+            value={formState.inputValues.title}
+            onChangeText={textHandlerChange.bind(this, "title")}
             keyboardType="default"
             autoCapitalize="sentences"
             autoCorrect
             returnKeyType="next"
           />
-          {!titleIsValid && <Text>Por favor, coloque um título válido./</Text>}
+          {!formState.inputValidities.title && (
+            <Text>Por favor, coloque um título válido./</Text>
+          )}
         </View>
         <View style={styles.formControl}>
           <Text style={styles.label}>URL da Imagem</Text>
           <TextInput
             style={styles.input}
-            value={url}
-            onChangeText={text => setUrl(text)}
+            value={formState.inputValues.url}
+            onChangeText={textHandlerChange.bind(this, "url")}
           />
         </View>
         {editedProduct ? null : (
@@ -101,8 +146,8 @@ const EditProductScreen = props => {
             <Text style={styles.label}>Preço</Text>
             <TextInput
               style={styles.input}
-              value={price}
-              onChangeText={text => setPrice(text)}
+              value={formState.inputValues.price}
+              onChangeText={textHandlerChange.bind(this, "price")}
               keyboardType="decimal-pad"
             />
           </View>
@@ -111,8 +156,8 @@ const EditProductScreen = props => {
           <Text style={styles.label}>Descrição</Text>
           <TextInput
             style={styles.input}
-            value={description}
-            onChangeText={text => setDescription(text)}
+            value={formState.inputValues.description}
+            onChangeText={textHandlerChange.bind(this, "description")}
           />
         </View>
       </View>
