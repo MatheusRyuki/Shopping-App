@@ -103,45 +103,59 @@ const EditProductScreen = props => {
     props.navigation.setParams({ submit: submitHandler });
   }, [submitHandler]);
 
-  const textHandlerChange = (inputIdentifier, text) => {
-    let isValid = false;
-    if (text.trim().length > 0) {
-      isValid = true;
-    }
-    dispatchForm({
-      type: FORM_UPDATE,
-      value: text,
-      isValid,
-      input: inputIdentifier
-    });
-  };
+  const textHandlerChange = useCallback(
+    (inputIdentifier, value, isValid) => {
+      dispatchForm({
+        type: FORM_UPDATE,
+        value: text,
+        isValid,
+        input: inputIdentifier
+      });
+    },
+    [dispatchForm]
+  );
 
   return (
     <ScrollView>
       <View style={styles.form}>
         <Input
+          id="title"
           label="Título"
           errorMsg="Por favor, coloque um título válido"
           keyboardType="default"
           autoCapitalize="sentences"
           autoCorrect
           returnKeyType="next"
+          initialValue={editedProduct ? editedProduct.title : ""}
+          initialValid={editedProduct ? true : false}
+          onInputChange={textHandlerChange}
+          required
         />
         <Input
+          id="url"
           label="Imagem"
           errorMsg="Por favor, coloque uma imagem válido"
           keyboardType="default"
           returnKeyType="next"
+          initialValue={editedProduct ? editedProduct.imageUrl : ""}
+          initialValid={editedProduct ? true : false}
+          onInputChange={textHandlerChange}
+          required
         />
         {editedProduct ? null : (
           <Input
+            id="price"
             label="Preço"
             errorMsg="Por favor, coloque um preço válido"
             keyboardType="decimal-pad"
             returnKeyType="next"
+            required
+            min={0.1}
+            onInputChange={textHandlerChange}
           />
         )}
         <Input
+          id="description"
           label="Descrição"
           errorMsg="Por favor, coloque uma descrição válida"
           keyboardType="default"
@@ -149,6 +163,11 @@ const EditProductScreen = props => {
           autoCorrect
           multiline
           numberOfLines={3}
+          initialValue={editedProduct ? editedProduct.description : ""}
+          initialValid={editedProduct ? true : false}
+          required
+          onInputChange={textHandlerChange}
+          minLength={5}
         />
       </View>
     </ScrollView>

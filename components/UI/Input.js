@@ -1,17 +1,35 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useEffect } from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
 
 const Input = props => {
   const INPUT_CHANGE = "INPUT_CHANGE";
+  const INPUT_BLUR = "INPUT_BLUR";
 
   const inputReducer = (state, action) => {
     switch (action.type) {
       case INPUT_CHANGE:
-
+        return {
+          ...state,
+          value: action.value,
+          isValid: action.isValid
+        };
+      case INPUT_BLUR:
+        return {
+          ...state,
+          touched: true
+        };
       default:
         return state;
     }
   };
+
+  const { onInputChange, id } = props;
+
+  useEffect(() => {
+    if (input.touched) {
+      onInputChange(id, input.value, input.isValid);
+    }
+  }, [input, onInputChange, id]);
 
   const [input, dispatch] = useReducer(inputReducer, {
     value: props.initialValue ? props.initialValue : "",
@@ -44,16 +62,23 @@ const Input = props => {
     });
   };
 
+  const lostFocusHandler = () => {
+    dispatch({
+      type: INPUT_BLUR
+    });
+  };
+
   return (
     <View style={styles.formControl}>
       <Text style={styles.label}>{props.label}</Text>
       <TextInput
         {...props}
         style={styles.input}
-        value={props.value}
-        onChangeText={textHandlerChange.bind(this, "title")}
+        value={input.value}
+        onBlur={lostFocusHandler}
+        onChangeText={textHandlerChange}
       />
-      {!formState.inputValidities.title && <Text>{props.errorMsg}/</Text>}
+      {!input.isValid && <Text>{props.errorMsg}/</Text>}
     </View>
   );
 };
