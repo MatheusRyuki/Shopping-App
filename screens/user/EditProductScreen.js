@@ -21,6 +21,7 @@ const EditProductScreen = props => {
   const dispatch = useDispatch();
 
   const [title, setTitle] = useState(editedProduct ? editedProduct.title : "");
+  const [titleIsValid, setTitleIsValid] = useState(false);
   const [url, setUrl] = useState(editedProduct ? editedProduct.imageUrl : "");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState(
@@ -28,6 +29,14 @@ const EditProductScreen = props => {
   );
 
   const submitHandler = useCallback(() => {
+    if (!titleIsValid) {
+      Alert.alert(
+        "Informações erradas!",
+        "Por favor, cheque as informações do formulário.",
+        [{ text: "Ok" }]
+      );
+      return;
+    }
     if (editedProduct) {
       dispatch(productsActions.updateProduct(prodId, title, description, url));
     } else {
@@ -40,6 +49,15 @@ const EditProductScreen = props => {
     props.navigation.setParams({ submit: submitHandler });
   }, [submitHandler]);
 
+  const titleHandlerChange = text => {
+    if (text.trim().length === 0) {
+      setTitleIsValid(false);
+    } else {
+      setTitleIsValid(true);
+    }
+    setTitle(text);
+  };
+
   return (
     <ScrollView>
       <View style={styles.form}>
@@ -48,14 +66,13 @@ const EditProductScreen = props => {
           <TextInput
             style={styles.input}
             value={title}
-            onChangeText={text => setTitle(text)}
+            onChangeText={titleHandlerChange}
             keyboardType="default"
             autoCapitalize="sentences"
             autoCorrect
             returnKeyType="next"
-            onEndEditing={() => console.log("terminou")}
-            onSubmitEditing={() => console.log("submit")}
           />
+          {!titleIsValid && <Text>Por favor, coloque um título válido./</Text>}
         </View>
         <View style={styles.formControl}>
           <Text style={styles.label}>URL da Imagem</Text>
