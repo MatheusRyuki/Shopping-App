@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useReducer } from "react";
 import {
   View,
   Text,
@@ -13,6 +13,13 @@ import { useSelector } from "react-redux";
 import * as productsActions from "../../store/actions/products";
 import { useDispatch } from "react-redux";
 
+const FORM_UPDATE = "UPDATE";
+
+const formReducer = (state, action) => {
+  if (action.type === FORM_UPDATE) {
+  }
+};
+
 const EditProductScreen = props => {
   const prodId = props.navigation.getParam("productId");
   const editedProduct = useSelector(state =>
@@ -20,13 +27,21 @@ const EditProductScreen = props => {
   );
   const dispatch = useDispatch();
 
-  const [title, setTitle] = useState(editedProduct ? editedProduct.title : "");
-  const [titleIsValid, setTitleIsValid] = useState(false);
-  const [url, setUrl] = useState(editedProduct ? editedProduct.imageUrl : "");
-  const [price, setPrice] = useState("");
-  const [description, setDescription] = useState(
-    editedProduct ? editedProduct.description : ""
-  );
+  const [formState, dispatchForm] = useReducer(formReducer, {
+    inputValues: {
+      title: editedProduct ? editedProduct.title : "",
+      url: editedProduct ? editedProduct.imageUrl : "",
+      description: editedProduct ? editedProduct.description : "",
+      price: ""
+    },
+    inputValidities: {
+      title: editedProduct ? true : false,
+      url: editedProduct ? true : false,
+      description: editedProduct ? true : false,
+      price: editedProduct ? true : false
+    },
+    formIsValid: editedProduct ? true : false
+  });
 
   const submitHandler = useCallback(() => {
     if (!titleIsValid) {
@@ -43,19 +58,18 @@ const EditProductScreen = props => {
       dispatch(productsActions.createProduct(title, description, url, +price));
     }
     props.navigation.goBack();
-  }, [dispatch, prodId, title, url, price, description]);
+  }, [dispatch, prodId, title, url, price, description, titleIsValid]);
 
   useEffect(() => {
     props.navigation.setParams({ submit: submitHandler });
   }, [submitHandler]);
 
   const titleHandlerChange = text => {
+    let isValid = false;
     if (text.trim().length === 0) {
-      setTitleIsValid(false);
-    } else {
-      setTitleIsValid(true);
+      isValid = true;
     }
-    setTitle(text);
+    dispatchForm({ type: FORM_UPDATE, value: text, isValid, input: "title" });
   };
 
   return (
