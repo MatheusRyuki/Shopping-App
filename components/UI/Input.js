@@ -25,17 +25,17 @@ const Input = props => {
 
   const { onInputChange, id } = props;
 
-  useEffect(() => {
-    if (input.touched) {
-      onInputChange(id, input.value, input.isValid);
-    }
-  }, [input, onInputChange, id]);
-
   const [input, dispatch] = useReducer(inputReducer, {
     value: props.initialValue ? props.initialValue : "",
     isValid: props.initialValid,
     touched: false
   });
+
+  useEffect(() => {
+    if (input.touched) {
+      onInputChange(id, input.value, input.isValid);
+    }
+  }, [input, onInputChange, id]);
 
   const textHandlerChange = text => {
     const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
