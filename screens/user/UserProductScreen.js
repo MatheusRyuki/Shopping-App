@@ -1,15 +1,25 @@
-import React, { useState } from "react";
-import { FlatList, Button, Alert } from "react-native";
+import React, { useState, useCallback, useEffect } from "react";
+import {
+  View,
+  FlatList,
+  Button,
+  Alert,
+  ActivityIndicator,
+  StyleSheet,
+  Text
+} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import ProductItem from "../../components/shop/ProductItem";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../components/UI/HeaderBUtton";
 import Colors from "../../constants/Colors";
-import * as ProductsAction from "../../store/actions/products";
+import * as productsActions from "../../store/actions/products";
 
 const UserProductsScreen = props => {
   const userProducts = useSelector(state => state.products.userProducts);
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const editProductHandler = id => {
     props.navigation.navigate("EditProduct", {
@@ -33,6 +43,56 @@ const UserProductsScreen = props => {
       ]
     );
   };
+
+  const loadProducts = useCallback(async () => {
+    setError(null);
+    setIsLoading(true);
+    try {
+      await dispatch(productsActions.fetchProducts());
+    } catch (err) {
+      setError(err);
+    }
+    setIsLoading(false);
+  }, [dispatch, setIsLoading, setError]);
+
+  useEffect(() => {
+    const willFocusSub = props.navigation.addListener(
+      "willFocus",
+      loadProducts
+    );
+    return () => {
+      willFocusSub.remove();
+    };
+  }, [loadProducts]);
+
+  if (error) {
+    return (
+      <View style={styles.center}>
+        <Text>Um erro ocorreu!</Text>
+        <Button
+          title="Tentar Novamente"
+          onPress={loadProducts}
+          color={Colors.primary}
+        />
+      </View>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
+  }
+
+  if (!isLoading && userProducts.length === 0) {
+    return (
+      <View style={styles.center}>
+        <Text>Sem itens para mostrar.</Text>
+      </View>
+    );
+  }
 
   return (
     <FlatList
@@ -94,5 +154,13 @@ UserProductsScreen.navigationOptions = navData => {
     )
   };
 };
+
+const styles = StyleSheet.create({
+  center: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  }
+});
 
 export default UserProductsScreen;
