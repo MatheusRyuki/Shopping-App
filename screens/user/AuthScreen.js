@@ -1,10 +1,12 @@
-import React, { useReducer, useCallback, useState } from "react";
+import React, { useReducer, useCallback, useEffect, useState } from "react";
 import {
   ScrollView,
   View,
   KeyboardAvoidingView,
   StyleSheet,
-  Button
+  Button,
+  ActivityIndicator,
+  Alert
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Input from "../../components/UI/Input";
@@ -42,10 +44,18 @@ const formReducer = (state, action) => {
 };
 
 const AuthScreen = props => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
   const [isSignUp, setIsSignUp] = useState(false);
   const dispatch = useDispatch();
 
-  const authHandler = () => {
+  useEffect(() => {
+    if (error) {
+      Alert.alert("Um erro aconteceu!", error, [{ text: "OK" }]);
+    }
+  }, [error]);
+
+  const authHandler = async () => {
     let action;
     if (isSignUp) {
       action = authActions.signup(
@@ -58,7 +68,16 @@ const AuthScreen = props => {
         formState.inputValues.passsword
       );
     }
-    dispatch(action);
+    setError(null);
+    setIsLoading(true);
+
+    try {
+      await dispatch(action);
+    } catch (err) {
+      setError(err.message);
+    }
+
+    setIsLoading(false);
   };
 
   const inputChangeHandler = useCallback(
@@ -118,11 +137,15 @@ const AuthScreen = props => {
               initialValue=""
             />
             <View style={styles.buttonContainer}>
-              <Button
-                title={isSignUp ? "Cadastrar" : "Login"}
-                color={Colors.primary}
-                onPress={authHandler}
-              />
+              {isLoading ? (
+                <ActivityIndicator size="small" color={Colors.primary} />
+              ) : (
+                <Button
+                  title={isSignUp ? "Cadastrar" : "Login"}
+                  color={Colors.primary}
+                  onPress={authHandler}
+                />
+              )}
             </View>
             <View style={styles.buttonContainer}>
               <Button

@@ -19,7 +19,16 @@ export const signup = (email, password) => {
     );
 
     if (!response.ok) {
-      throw new Error("Algo deu errado!");
+      const errorResData = await response.json();
+      const errorId = errorResData.error.message;
+
+      let message = "Algo aconteceu de errado!";
+
+      if (errorId === "EMAIL_EXISTS") {
+        message = "Esse e-mail já existe!";
+      }
+
+      throw new Error(message);
     }
 
     const resData = await response.json();
@@ -46,8 +55,17 @@ export const login = (email, password) => {
     );
 
     if (!response.ok) {
-      console.log(response);
-      throw new Error("Algo deu errado!");
+      const errorResData = await response.json();
+      const errorId = errorResData.error.message;
+
+      let message = "Algo aconteceu de errado!";
+
+      if (errorId === "INVALID_EMAIL") {
+        message = "Esse e-mail não foi encontrado!";
+      } else if (errorId === "INVALID_PASSWORD") {
+        message = "Essa senha não é válida!";
+      }
+      throw new Error(message);
     }
 
     const resData = await response.json();
