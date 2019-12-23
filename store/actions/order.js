@@ -39,10 +39,11 @@ export const fetchOrders = () => {
 };
 
 export const addOrder = (cartItems, totalAmount) => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
+    const token = getState().auth.token;
     const date = new Date();
     const response = await fetch(
-      "https://react-hooks-7a9a2.firebaseio.com/orders/u1.json",
+      `https://react-hooks-7a9a2.firebaseio.com/orders/u1.json?auth=${token}`,
       {
         method: "POST",
         headers: {
