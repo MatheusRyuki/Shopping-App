@@ -8,6 +8,7 @@ import UserProductsScreen from "../screens/user/UserProductScreen";
 import EditProductsScreen from "../screens/user/EditProductScreen";
 import CartScreen from "../screens/shop/CartScreen";
 import OrderScreen from "../screens/shop/OrdersScreen";
+import StartScreen from "../screens/StartupScreen";
 import Colors from "../constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import AuthScreen from "../screens/user/AuthScreen";
@@ -90,6 +91,7 @@ const AuthNavigator = createStackNavigator(
 );
 
 const MainNavigator = createSwitchNavigator({
+  Start: StartScreen,
   Auth: AuthNavigator,
   Shop: ShopNavigator
 });
