@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, View, ActivityIndicator, StyleSheet } from "react-native";
+import {
+  FlatList,
+  View,
+  ActivityIndicator,
+  StyleSheet,
+  Text
+} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../components/UI/HeaderBUtton";
@@ -27,6 +33,14 @@ const OrdersScreen = props => {
     return (
       <View style={styles.center}>
         <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
+  }
+
+  if (!isLoading && orders.length === 0) {
+    return (
+      <View style={styles.center}>
+        <Text>Sem pedidos para mostrar.</Text>
       </View>
     );
   }
