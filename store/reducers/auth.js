@@ -13,7 +13,7 @@ export default (state = initialState, action) => {
         userId: action.userId
       };
     case LOGOUT:
-      return state;
+      return initialState;
     default:
       return state;
   }

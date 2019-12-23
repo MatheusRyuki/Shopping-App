@@ -15,6 +15,7 @@ import AuthScreen from "../screens/user/AuthScreen";
 import { SafeAreaView, Button, View } from "react-native";
 import { useDispatch } from "react-redux";
 import * as authActions from "../store/actions/auth";
+import NavigationContainer from "./NavigationContainer";
 
 const defaultNavOptions = {
   headerStyle: {
