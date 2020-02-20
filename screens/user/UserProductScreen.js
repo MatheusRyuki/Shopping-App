@@ -56,12 +56,12 @@ const UserProductsScreen = props => {
   }, [dispatch, setIsLoading, setError]);
 
   useEffect(() => {
-    const willFocusSub = props.navigation.addListener(
-      "willFocus",
+    const unsubscribe = props.navigation.addListener(
+      "focus",
       loadProducts
     );
     return () => {
-      willFocusSub.remove();
+      unsubscribe();
     };
   }, [loadProducts]);
 
@@ -127,10 +127,10 @@ const UserProductsScreen = props => {
   );
 };
 
-export const screenOption = navData => {
+export const screenOptions = navData => {
   return {
     headerTitle: "Seus Produtos",
-    headerLeft: (
+    headerLeft: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
           title="Menu"
@@ -141,7 +141,7 @@ export const screenOption = navData => {
         />
       </HeaderButtons>
     ),
-    headerRight: (
+    headerRight: () =>  (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
           title="Menu"

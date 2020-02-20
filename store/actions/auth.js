@@ -1,7 +1,13 @@
 import { AsyncStorage } from "react-native";
 export const AUTHENTICATE = "AUTHENTICATE";
 export const LOGOUT = "LOGOUT";
+export const SET_DID_TRY_AL = "SET_DID_TRY_AL";
 let timer;
+
+
+export const setDidTryAl = () => {
+  return { type: SET_DID_TRY_AL }
+} 
 
 export const authenticate = (userId, token, expiryDate) => {
   return dispatch => {
@@ -76,6 +82,7 @@ export const login = (email, password) => {
     if (!response.ok) {
       const errorResData = await response.json();
       const errorId = errorResData.error.message;
+      console.log(errorResData)
 
       let message = "Algo aconteceu de errado!";
 
@@ -83,6 +90,8 @@ export const login = (email, password) => {
         message = "Esse e-mail não foi encontrado!";
       } else if (errorId === "INVALID_PASSWORD") {
         message = "Essa senha não é válida!";
+      } else if (errorId === "EMAIL_NOT_FOUND") {
+        message = "Email não existe"
       }
       throw new Error(message);
     }

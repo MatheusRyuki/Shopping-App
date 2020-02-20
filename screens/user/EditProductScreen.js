@@ -204,14 +204,14 @@ const EditProductScreen = props => {
   );
 };
 
-export const screenOption = navData => {
+export const screenOptions = navData => {
   const submitFn = navData.navigation.getParam("submit");
 
   return {
     headerTitle: navData.navigation.getParam("productId")
       ? "Editar Produto"
       : "Adicionar Produto",
-    headerRight: (
+    headerRight: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item title="Menu" iconName={"md-checkmark"} onPress={submitFn} />
       </HeaderButtons>
