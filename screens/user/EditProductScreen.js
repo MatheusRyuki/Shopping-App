@@ -116,7 +116,12 @@ const EditProductScreen = props => {
   }, [dispatch, prodId, formState]);
 
   useEffect(() => {
-    props.navigation.setParams({ submit: submitHandler });
+    props.navigation.setOptions({
+      headerRight: () => (
+        <HeaderButtons HeaderButtonComponent={HeaderButton}>
+          <Item title="Menu" iconName={"md-checkmark"} onPress={submitHandler} />
+        </HeaderButtons>
+      )});
   }, [submitHandler]);
 
   const inputHandlerChange = useCallback(
@@ -205,17 +210,11 @@ const EditProductScreen = props => {
 };
 
 export const screenOptions = navData => {
-  const submitFn = navData.route.params ? navData.route.params.submit : null;
   const routeParams = navData.route.params ? navData.route.params : {};
   return {
     headerTitle: routeParams.productId
       ? "Editar Produto"
       : "Adicionar Produto",
-    headerRight: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButton}>
-        <Item title="Menu" iconName={"md-checkmark"} onPress={submitFn} />
-      </HeaderButtons>
-    )
   };
 };
 
