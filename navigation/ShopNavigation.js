@@ -1,12 +1,12 @@
 import React from "react";
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import ProductsOverviewScreen, { screenOptions } from "../screens/shop/ProductOverviewScreen";
-import ProductDetailScreen from "../screens/shop/ProductDetailsScreen";
-import UserProductsScreen from "../screens/user/UserProductScreen";
-import EditProductsScreen from "../screens/user/EditProductScreen";
-import CartScreen from "../screens/shop/CartScreen";
-import OrderScreen from "../screens/shop/OrdersScreen";
+import ProductsOverviewScreen, { screenOptions as OverviewOptions } from "../screens/shop/ProductOverviewScreen";
+import ProductDetailScreen, { screenOptions as ProductsDetailOptions } from "../screens/shop/ProductDetailsScreen";
+import UserProductsScreen, { screenOptions as UsersOptions }from "../screens/user/UserProductScreen";
+import EditProductsScreen, { screenOptions as EditsOptions } from "../screens/user/EditProductScreen";
+import CartScreen, { screenOptions as CartOptions } from "../screens/shop/CartScreen";
+import OrderScreen, { screenOptions as OrdersOptions}  from "../screens/shop/OrdersScreen";
 import StartScreen from "../screens/StartupScreen";
 import Colors from "../constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
@@ -31,40 +31,30 @@ const ProductsStackNavigator = createStackNavigator();
 
 export const ProductsNavigator = () => {
   return <ProductsStackNavigator.Navigator screenOptions={defaultNavOptions}>
-    <ProductsStackNavigator.Screen name="ProductsOverview" component={ProductsOverviewScreen} options={screenOptions}/>
-    <ProductsStackNavigator.Screen name="ProductDetail" component={ProductDetailScreen}   />
-    <ProductsStackNavigator.Screen name="Cart" component={CartScreen} />
+    <ProductsStackNavigator.Screen name="ProductsOverview" component={ProductsOverviewScreen} options={OverviewOptions}/>
+    <ProductsStackNavigator.Screen name="ProductDetail" component={ProductDetailScreen} options={ProductsDetailOptions} />
+    <ProductsStackNavigator.Screen name="Cart" component={CartScreen} options={CartOptions} />
   </ProductsStackNavigator.Navigator>
 };
 
-/* const OrdersNavigator = createStackNavigator(
-  {
-    Order: OrderScreen
-  },
-  {
-    navigationOptions: {
-      drawerIcon: drawerConfig => (
-        <Ionicons name={"md-list"} size={23} color={drawerConfig.tintColor} />
-      )
-    },
-    defaultNavigationOptions: defaultNavOptions
-  }
-);
+const OrdersStackNavigator = createStackNavigator();
 
-const AdminNavigator = createStackNavigator(
-  {
-    UserProducts: UserProductsScreen,
-    EditProduct: EditProductsScreen
-  },
-  {
-    navigationOptions: {
-      drawerIcon: drawerConfig => (
-        <Ionicons name={"md-create"} size={23} color={drawerConfig.tintColor} />
-      )
-    },
-    defaultNavigationOptions: defaultNavOptions
-  }
-);
+export const OrdersNavigator = () => {
+  return <OrdersStackNavigator.Navigator screenOptions={defaultNavOptions}>
+    <OrdersStackNavigator.Screen name="Order" component={OrderScreen} options={OrdersOptions} />
+  </OrdersStackNavigator.Navigator>
+};
+
+const AdminStackNavigator = createStackNavigator();
+
+export const AdminNavigator = () => {
+  return <AdminStackNavigator.Navigator screenOptions={defaultNavOptions}>
+    <AdminStackNavigator.Screen name="UserProducts" component={UserProductsScreen} options={UsersOptions} />
+    <AdminStackNavigator.Screen name="EditProduct" component={EditProductsScreen} options={EditsOptions} />
+  </AdminStackNavigator.Navigator>
+};
+
+/*
 
 const ShopNavigator = createDrawerNavigator(
   {
