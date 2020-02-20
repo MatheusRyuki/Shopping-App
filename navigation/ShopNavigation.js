@@ -1,8 +1,7 @@
 import React from "react";
-import { createAppContainer, createSwitchNavigator } from "react-navigation";
-import { createStackNavigator } from "react-navigation-stack";
-import { createDrawerNavigator, DrawerItems } from "react-navigation-drawer";
-import ProductsOverviewScreen from "../screens/shop/ProductOverviewScreen";
+import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import ProductsOverviewScreen, { screenOptions } from "../screens/shop/ProductOverviewScreen";
 import ProductDetailScreen from "../screens/shop/ProductDetailsScreen";
 import UserProductsScreen from "../screens/user/UserProductScreen";
 import EditProductsScreen from "../screens/user/EditProductScreen";
@@ -27,23 +26,18 @@ const defaultNavOptions = {
   headerTintColor: "white"
 };
 
-const ProductsNavigator = createStackNavigator(
-  {
-    ProductsOverview: ProductsOverviewScreen,
-    ProductDetail: ProductDetailScreen,
-    Cart: CartScreen
-  },
-  {
-    navigationOptions: {
-      drawerIcon: drawerConfig => (
-        <Ionicons name={"md-cart"} size={23} color={drawerConfig.tintColor} />
-      )
-    },
-    defaultNavigationOptions: defaultNavOptions
-  }
-);
 
-const OrdersNavigator = createStackNavigator(
+const ProductsStackNavigator = createStackNavigator();
+
+export const ProductsNavigator = () => {
+  return <ProductsStackNavigator.Navigator screenOptions={defaultNavOptions}>
+    <ProductsStackNavigator.Screen name="ProductsOverview" component={ProductsOverviewScreen} options={screenOptions}/>
+    <ProductsStackNavigator.Screen name="ProductDetail" component={ProductDetailScreen}   />
+    <ProductsStackNavigator.Screen name="Cart" component={CartScreen} />
+  </ProductsStackNavigator.Navigator>
+};
+
+/* const OrdersNavigator = createStackNavigator(
   {
     Order: OrderScreen
   },
@@ -116,6 +110,6 @@ const MainNavigator = createSwitchNavigator({
   Start: StartScreen,
   Auth: AuthNavigator,
   Shop: ShopNavigator
-});
-
-export default createAppContainer(MainNavigator);
+}); */
+/* 
+export default createAppContainer(MainNavigator); */
